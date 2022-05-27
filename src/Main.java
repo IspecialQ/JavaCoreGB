@@ -1,40 +1,48 @@
+import grocery.Apple;
+import grocery.Box;
+import grocery.Orange;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
-        String[][] test;
-        test = new String[4][4];
-        //test = new String[5][3];
-        for (int i = 0; i < test.length; i++) {
-            for (int j = 0; j < test[i].length; j++) test[i][j] = "1";
-        }
+        String[] string = {"1", "2", "3", "4"};
+        System.out.println(Arrays.toString(string));
+        changeArrayElements(string,2,3);
+        System.out.println(Arrays.toString(string));
 
-        //test[2][2] = "ops!";
+    Box<Apple> appleBox = new Box<>(addNewApple(15)); // создаем коробку с яблоками
+    Box<Orange> orangeBox = new Box<>(addNewOrange(25)); // создаем коробку с апельсинами
+    appleBox.compare(orangeBox);
+    Box<Apple> anotherAppleBox = new Box(addNewApple(5)); //еще одна коробка яблок
+    appleBox.sprinkle(anotherAppleBox); //высыпаем из первой во вторую
+    appleBox.showWeight(); // вес коробок изменился
+    anotherAppleBox.showWeight();
 
-        try {
-            someWorkWithArray(test);
-        } catch (MyArraySizeException | MyArrayDataException e) {
-            e.printStackTrace();
-        }
     }
 
+    public static <T>void changeArrayElements(T[] array, int firstIndex, int secondIndex) {
+        T i = array[firstIndex];
+        array[firstIndex] = array[secondIndex];
+        array[secondIndex] = i;
 
+    }
 
-    public static void someWorkWithArray(String[][] array) throws MyArraySizeException,MyArrayDataException {
-        if (array.length == 4 && array[1].length == 4) {
-            for (int i = 0; i < array.length; i++) {
-                for(int j = 0; j < array.length; j++) {
-                    try {
-                        int h = Integer.parseInt(array[i][j]);
-                        h += h;
-                    } catch (NumberFormatException e) {
-                        throw new MyArrayDataException("Array contains not valid symbol. Index = ", i, j);
-                    }
-                }
-            }
+    public static ArrayList<Apple> addNewApple(int count){
+        ArrayList<Apple> fruits =  new ArrayList<>();
+        for(int i = 0; i < count; i++){
+            fruits.add(new Apple());
         }
-        else {
-            throw new MyArraySizeException("Array size should be [4][4]");
+        return fruits;
+    }
+
+    public static ArrayList<Orange> addNewOrange(int count){
+        ArrayList<Orange> fruits =  new ArrayList<>();
+        for(int i = 0; i < count; i++){
+            fruits.add(new Orange());
         }
+        return fruits;
     }
 }
 
