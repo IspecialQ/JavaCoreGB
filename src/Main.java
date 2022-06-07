@@ -1,55 +1,35 @@
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.crypto.Data;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class Main {
+    public static final String fileName = "table.csv";
     public static void main(String[] args) {
-        String[] someWords = {
-                "red", "dress", "chain", "shirt", "blue", "purple", "purple", "shoes", "snapback",
-                "dress", "watch", "chain", "shirt", "watch", "purple"};
 
-        uniqueWords(someWords);
+       try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+           byte[] csvData = newData().toString().getBytes(StandardCharsets.UTF_8);
+           fileOutputStream.write(csvData);
+       } catch (Exception e) {
+           System.out.println(e.getMessage());
+       }
 
-        System.out.println();
+       try (FileInputStream fileInputStream = new FileInputStream(fileName)) {
+           byte[] csvDate = new byte[fileInputStream.available()];
+           fileInputStream.read(csvDate);
+           String table = new String(csvDate);
+           System.out.println(table);
+       } catch (Exception e) {
+           System.out.println(e.getMessage());
+       }
 
-        PhoneBook actorsPhoneBook = new PhoneBook();
-        actorsPhoneBook.addContact("88005553535", "Schwarzenegger");
-        actorsPhoneBook.addContact("89163556213", "Diaz");
-        actorsPhoneBook.addContact("83272377727","Stallone");
-        actorsPhoneBook.addContact("80923929543","Carrey");
-        actorsPhoneBook.addContact("88004777224","Schwarzenegger");
-        actorsPhoneBook.addContact("83756564530","Stallone");
-        actorsPhoneBook.addContact("89203943034","Willis");
-
-
-        actorsPhoneBook.foundPhone("Stallone");
-        actorsPhoneBook.foundPhone("Willis");
     }
 
-    public static void uniqueWords(String[] array) {
-        HashMap<String, Integer> countWords = new HashMap<>();
-        final int countOne = 1;
-        for (String word : array) {
-            if (countWords.containsKey(word)) {
-                int count = countWords.get(word);
-                countWords.put(word, count + 1);
-            } else {
-                countWords.put(word, countOne);
-            }
-        }
-
-        System.out.println("Unique words");
-        for (Map.Entry<String, Integer> wordEntry : countWords.entrySet()) {
-            if (wordEntry.getValue() == countOne) {
-                System.out.println(wordEntry.getKey());
-            }
-        }
-
-        System.out.println("Not unique words");
-        for (Map.Entry<String, Integer> wordEntry : countWords.entrySet()) {
-            if (wordEntry.getValue() != countOne) {
-              System.out.println(wordEntry.getKey() + " - " + wordEntry.getValue());
-            }
-        }
+    public static AppData newData() {
+        AppData appData = new AppData();
+        String[] headers = new String[] {"Value 1", "Value 2", "Value 3"};
+        appData.init(headers);
+        return appData;
     }
 }
 
